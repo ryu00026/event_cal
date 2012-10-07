@@ -10,6 +10,8 @@
 
 #import "DetailViewController.h"
 
+#import "SBJson.h"
+
 @interface MasterViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
@@ -29,6 +31,32 @@
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
+    // twitterからstatusesをダウンロードするためのURLリクエストを準備
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://twitter.com/statuses/public_timeline.json"]];
+    
+    // URLからJSONデータを取得(NSData)
+    NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    
+    // JSONで解析するために、NSDataをNSStringに変換。
+    NSString *json_string = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+    
+    // JSONデータをパースする。
+    // ここではJSONデータが配列としてパースされるので、NSArray型でデータ取得
+    NSArray *statuses = [json_string JSONValue];
+    
+    // statuses内の要素を取り出して、確認
+    for (NSDictionary *status in statuses)
+    {
+        // You can retrieve individual values using objectForKey on the status NSDictionary
+        // This will print the tweet and username to the console
+        //NSLog(@"%@ - %@", [status objectForKey:@"text"], [[status objectForKey:@"user"] objectForKey:@"screen_name"]);
+        NSMutableArray *indexData = [NSMutableArray array];
+        NSString *row = [NSString stringWithFormat:@"%@ - %@", [status objectForKey:@"text"], [[status objectForKey:@"user"] objectForKey:@"screen_name"]];
+        [indexData addObject:row];
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
