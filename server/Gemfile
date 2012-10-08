@@ -51,6 +51,7 @@ gem 'capistrano'
 # gem 'debugger'
 
 group :development, :test do
+  gem "rspec-rails"
   gem 'spork'
   gem 'guard-spork'
   gem 'guard-rspec'
