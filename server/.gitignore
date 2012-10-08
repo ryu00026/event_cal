@@ -27,7 +27,7 @@
 TAGS
 dump.rdb
 tmp
-vendor/bundler/
+vendor/bundles/
 .DS_Store
 /post-receive*
 *のコピー
